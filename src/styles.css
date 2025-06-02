@@ -1,0 +1,170 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+  background: radial-gradient(ellipse at center, #1a1a1a 0%, #000000 100%);
+  color: #ffffff;
+  overflow: hidden;
+  user-select: none;
+}
+
+.app {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #ffd700;
+  z-index: 1000;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #333;
+  border-top: 2px solid #ffd700;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ui-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.title {
+  position: absolute;
+  top: 30px;
+  left: 30px;
+  pointer-events: none;
+}
+
+.title h1 {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  margin-bottom: 5px;
+}
+
+.title p {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: #cccccc;
+  text-transform: uppercase;
+}
+
+.controls {
+  position: absolute;
+  top: 30px;
+  right: 30px;
+  display: flex;
+  gap: 15px;
+}
+
+.controls button {
+  padding: 8px 16px;
+  background: rgba(0, 0, 0, 0.7);
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  font-family: inherit;
+  font-size: 11px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+}
+
+.controls button:hover {
+  background: rgba(255, 215, 0, 0.1);
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+  transform: translateY(-1px);
+}
+
+.gauge-tooltip {
+  position: absolute;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid #ffd700;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 11px;
+  color: #ffffff;
+  pointer-events: none;
+  z-index: 1000;
+  backdrop-filter: blur(10px);
+}
+
+.gauge-tooltip .value {
+  font-size: 16px;
+  color: #ffd700;
+  font-weight: bold;
+}
+
+.gauge-tooltip .delta {
+  font-size: 10px;
+  color: #00ff88;
+}
+
+.gauge-tooltip .delta.negative {
+  color: #ff4444;
+}
+
+.app.night-mode {
+  background: radial-gradient(ellipse at center, #0a0a0a 0%, #000000 100%);
+}
+
+.app.night-mode .title h1 {
+  color: #ffaa00;
+  text-shadow: 0 0 15px rgba(255, 170, 0, 0.7);
+}
+
+.app.night-mode .controls button {
+  border-color: #ffaa00;
+  color: #ffaa00;
+}
+
+.app.night-mode .controls button.active {
+  background: rgba(255, 170, 0, 0.2);
+  box-shadow: 0 0 25px rgba(255, 170, 0, 0.5);
+}
+
+.audio-prompt {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #888888;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
