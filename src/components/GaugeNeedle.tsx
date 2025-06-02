@@ -1,11 +1,11 @@
-import React, { forwardRef } from 'react'
+import { forwardRef } from 'react'
 import { Mesh } from 'three'
 
 interface GaugeNeedleProps {
   color: string
 }
 
-const GaugeNeedle = forwardRef<Mesh, GaugeNeedleProps>(({ color }, ref) => {
+const GaugeNeedle = forwardRef<Mesh, GaugeNeedleProps>((_, ref) => {
   return (
     <group>
       <mesh ref={ref} position={[0, 0, 0.08]}>

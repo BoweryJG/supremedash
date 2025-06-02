@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useEffect, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Text, Html } from '@react-three/drei'
-import { Group, Mesh, Vector3, MathUtils } from 'three'
+import { Group, Mesh, MeshBasicMaterial } from 'three'
 import { gsap } from 'gsap'
 import GaugeFrame from './GaugeFrame'
 import GaugeNeedle from './GaugeNeedle'
@@ -24,9 +24,9 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
   max,
   unit,
   position,
-  color,
-  type,
-  nightMode = false
+  color: _color,
+  type: _type,
+  nightMode: _nightMode = false
 }) => {
   const groupRef = useRef<Group>(null)
   const needleRef = useRef<Mesh>(null)
@@ -34,7 +34,7 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
   const [currentValue, setCurrentValue] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
-  const { camera, size } = useThree()
+  const { } = useThree()
 
   const needleAngle = useMemo(() => {
     const percentage = Math.min(currentValue / max, 1)
@@ -81,8 +81,8 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
     }
 
     if (glowRef.current) {
-      const pulseIntensity = Math.max(0.3, (currentValue / max) * 0.8)
-      glowRef.current.material.opacity = 
+      const pulseIntensity: number = Math.max(0.3, (currentValue / max) * 0.8);
+      (glowRef.current.material as MeshBasicMaterial).opacity = 
         pulseIntensity + Math.sin(clock.elapsedTime * 2) * 0.1
     }
   })
