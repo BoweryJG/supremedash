@@ -168,3 +168,16 @@ body {
   0%, 100% { opacity: 0.5; }
   50% { opacity: 1; }
 }
+
+@keyframes led-pulse {
+  0%, 100% {
+    filter: brightness(1) drop-shadow(0 0 10px currentColor);
+  }
+  50% {
+    filter: brightness(1.2) drop-shadow(0 0 20px currentColor);
+  }
+}
+
+.led-display {
+  animation: led-pulse 2s ease-in-out infinite;
+}

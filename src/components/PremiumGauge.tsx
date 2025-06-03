@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useEffect, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Text, Html } from '@react-three/drei'
-import { Group, Mesh, MeshBasicMaterial } from 'three'
+import { Group, Mesh, MeshBasicMaterial, BoxGeometry } from 'three'
 import { gsap } from 'gsap'
 import GaugeFrame from './GaugeFrame'
 import GaugeNeedle from './GaugeNeedle'
@@ -31,6 +31,7 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
   const groupRef = useRef<Group>(null)
   const needleRef = useRef<Mesh>(null)
   const glowRef = useRef<Mesh>(null)
+  const ledGlowRef = useRef<Mesh>(null)
   const [currentValue, setCurrentValue] = useState(0)
   const [isHovered, setIsHovered] = useState(false)
   const [showTooltip, setShowTooltip] = useState(false)
@@ -85,6 +86,11 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
       (glowRef.current.material as MeshBasicMaterial).opacity = 
         pulseIntensity + Math.sin(clock.elapsedTime * 2) * 0.1
     }
+
+    if (ledGlowRef.current) {
+      const ledPulse = 0.3 + Math.sin(clock.elapsedTime * 3) * 0.2;
+      (ledGlowRef.current.material as MeshBasicMaterial).opacity = ledPulse
+    }
   })
 
   const handlePointerEnter = () => {
@@ -129,6 +135,57 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
           opacity={0.1}
         />
       </mesh>
+
+      {/* LED Display Background */}
+      <mesh position={[0, 0.55, 0.05]}>
+        <boxGeometry args={[0.4, 0.15, 0.02]} />
+        <meshBasicMaterial color="#0a0a0a" />
+      </mesh>
+      
+      {/* LED Display Frame */}
+      <mesh position={[0, 0.55, 0.06]}>
+        <boxGeometry args={[0.42, 0.17, 0.01]} />
+        <meshBasicMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
+      </mesh>
+
+      {/* LED Glow Effect */}
+      <mesh ref={ledGlowRef} position={[0, 0.55, 0.07]}>
+        <planeGeometry args={[0.38, 0.13]} />
+        <meshBasicMaterial 
+          color={gaugeColor}
+          transparent
+          opacity={0.3}
+          blending={2}
+        />
+      </mesh>
+
+      {/* LED Digital Display */}
+      <Text
+        position={[0, 0.55, 0.08]}
+        fontSize={0.1}
+        color={gaugeColor}
+        anchorX="center"
+        anchorY="middle"
+        font={undefined}
+        letterSpacing={0.02}
+        outlineWidth={0.003}
+        outlineColor={gaugeColor}
+        outlineOpacity={0.5}
+      >
+        {Math.round(currentValue).toString().padStart(2, '0')}
+      </Text>
+
+      {/* LED Segments Decoration */}
+      {[-0.15, -0.05, 0.05, 0.15].map((x, i) => (
+        <mesh key={i} position={[x, 0.55, 0.075]}>
+          <boxGeometry args={[0.005, 0.08, 0.001]} />
+          <meshBasicMaterial 
+            color={gaugeColor}
+            transparent
+            opacity={0.2}
+          />
+        </mesh>
+      ))}
 
       <Text
         position={[0, -0.3, 0.15]}
