@@ -6,6 +6,7 @@ import { gsap } from 'gsap'
 import GaugeFrame from './GaugeFrame'
 import GaugeNeedle from './GaugeNeedle'
 import GaugeFace from './GaugeFace'
+import { audioManager } from '../utils/AudioManager'
 
 interface PremiumGaugeProps {
   label: string
@@ -97,6 +98,7 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
     setIsHovered(true)
     setShowTooltip(true)
     document.body.style.cursor = 'pointer'
+    audioManager.playTick()
   }
 
   const handlePointerLeave = () => {
@@ -107,6 +109,7 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
 
   const handleClick = () => {
     if (groupRef.current) {
+      audioManager.playSnap()
       gsap.to(groupRef.current.rotation, {
         y: groupRef.current.rotation.y + Math.PI * 2,
         duration: 1,
