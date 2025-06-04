@@ -4,9 +4,10 @@ import { Mesh } from 'three'
 
 interface GaugeFrameProps {
   color: string
+  nightMode?: boolean
 }
 
-const GaugeFrame: React.FC<GaugeFrameProps> = ({ color }) => {
+const GaugeFrame: React.FC<GaugeFrameProps> = ({ color, nightMode = false }) => {
   const outerRingRef = useRef<Mesh>(null)
   const innerRingRef = useRef<Mesh>(null)
 

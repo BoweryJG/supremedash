@@ -24,9 +24,9 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
   max,
   unit,
   position,
-  color: _color,
-  type: _type,
-  nightMode: _nightMode = false
+  color,
+  type,
+  nightMode = false
 }) => {
   const groupRef = useRef<Group>(null)
   const needleRef = useRef<Mesh>(null)
@@ -123,8 +123,8 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
       onPointerLeave={handlePointerLeave}
       onClick={handleClick}
     >
-      <GaugeFrame color={gaugeColor} />
-      <GaugeFace label={label} max={max} color={gaugeColor} />
+      <GaugeFrame color={gaugeColor} nightMode={nightMode} />
+      <GaugeFace label={label} max={max} color={gaugeColor} nightMode={nightMode} />
       <GaugeNeedle ref={needleRef} color={gaugeColor} />
       
       <mesh ref={glowRef} position={[0, 0, 0.1]}>
@@ -132,7 +132,7 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
         <meshBasicMaterial 
           color={gaugeColor}
           transparent
-          opacity={0.1}
+          opacity={nightMode ? 0.3 : 0.1}
         />
       </mesh>
 
@@ -154,7 +154,7 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
         <meshBasicMaterial 
           color={gaugeColor}
           transparent
-          opacity={0.3}
+          opacity={nightMode ? 0.6 : 0.3}
           blending={2}
         />
       </mesh>

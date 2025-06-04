@@ -5,9 +5,10 @@ interface GaugeFaceProps {
   label: string
   max: number
   color: string
+  nightMode?: boolean
 }
 
-const GaugeFace: React.FC<GaugeFaceProps> = ({ label, max, color }) => {
+const GaugeFace: React.FC<GaugeFaceProps> = ({ label, max, color, nightMode = false }) => {
   const generateTicks = () => {
     const ticks = []
     const steps = 8
@@ -85,13 +86,14 @@ const GaugeFace: React.FC<GaugeFaceProps> = ({ label, max, color }) => {
 
       <Text
         position={[0, -0.5, 0.15]}
-        fontSize={0.03}
+        fontSize={0.025}
         color="#888888"
         anchorX="center"
         anchorY="middle"
         font={undefined}
+        letterSpacing={0.02}
       >
-        SUPREME SERIES
+        REPSPHERES series
       </Text>
 
       <Text
