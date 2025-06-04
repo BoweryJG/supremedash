@@ -41,7 +41,7 @@ function App() {
   }
 
   return (
-    <div className="app">
+    <div className={`app ${nightMode ? 'night-mode' : ''}`}>
       <Canvas
         camera={{ position: [0, 0, 8], fov: 45 }}
         gl={{ 

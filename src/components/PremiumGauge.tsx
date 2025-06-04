@@ -136,56 +136,141 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
         />
       </mesh>
 
-      {/* LED Display Background */}
-      <mesh position={[0, 0.55, 0.05]}>
-        <boxGeometry args={[0.4, 0.15, 0.02]} />
-        <meshBasicMaterial color="#0a0a0a" />
+      {/* Night mode outer glow */}
+      {nightMode && (
+        <mesh position={[0, 0, -0.1]}>
+          <circleGeometry args={[1.2, 32]} />
+          <meshBasicMaterial 
+            color={gaugeColor}
+            transparent
+            opacity={0.15}
+            blending={2}
+          />
+        </mesh>
+      )}
+
+      {/* Analog Display Housing */}
+      <mesh position={[0, 0.55, 0.03]}>
+        <boxGeometry args={[0.5, 0.22, 0.05]} />
+        <meshPhysicalMaterial 
+          color="#0a0a0a" 
+          metalness={0.9}
+          roughness={0.4}
+          clearcoat={1}
+          clearcoatRoughness={0.1}
+        />
       </mesh>
       
-      {/* LED Display Frame */}
-      <mesh position={[0, 0.55, 0.06]}>
-        <boxGeometry args={[0.42, 0.17, 0.01]} />
-        <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
+      {/* Chrome Bezel */}
+      <mesh position={[0, 0.55, 0.055]}>
+        <boxGeometry args={[0.52, 0.24, 0.01]} />
+        <meshPhysicalMaterial 
+          color="#888888" 
+          metalness={1}
+          roughness={0.2}
+          envMapIntensity={2}
+        />
       </mesh>
 
-      {/* LED Glow Effect */}
+      {/* Display Window Glass */}
+      <mesh position={[0, 0.55, 0.065]}>
+        <planeGeometry args={[0.45, 0.18]} />
+        <meshPhysicalMaterial 
+          color="#000000"
+          metalness={0}
+          roughness={0}
+          transmission={0.95}
+          thickness={0.5}
+          transparent
+          opacity={0.2}
+        />
+      </mesh>
+
+      {/* Analog Display Glow */}
       <mesh ref={ledGlowRef} position={[0, 0.55, 0.07]}>
-        <planeGeometry args={[0.38, 0.13]} />
+        <planeGeometry args={[0.42, 0.16]} />
         <meshBasicMaterial 
           color={gaugeColor}
           transparent
-          opacity={nightMode ? 0.6 : 0.3}
+          opacity={nightMode ? 0.5 : 0.2}
           blending={2}
         />
       </mesh>
 
-      {/* LED Digital Display */}
+      {/* Split Flap Display - Tens Digit */}
+      <group position={[-0.08, 0.55, 0.08]}>
+        <mesh>
+          <boxGeometry args={[0.12, 0.14, 0.02]} />
+          <meshPhysicalMaterial 
+            color="#1a1a1a"
+            metalness={0.7}
+            roughness={0.5}
+          />
+        </mesh>
+        <Text
+          position={[0, 0, 0.015]}
+          fontSize={0.12}
+          color={nightMode ? gaugeColor : "#ffffff"}
+          anchorX="center"
+          anchorY="middle"
+          font={undefined}
+          letterSpacing={-0.02}
+          outlineWidth={0.004}
+          outlineColor="#000000"
+          outlineOpacity={0.8}
+        >
+          {Math.floor(currentValue / 10).toString()}
+        </Text>
+        {/* Split line */}
+        <mesh position={[0, 0, 0.016]}>
+          <boxGeometry args={[0.12, 0.002, 0.001]} />
+          <meshBasicMaterial color="#000000" />
+        </mesh>
+      </group>
+
+      {/* Split Flap Display - Ones Digit */}
+      <group position={[0.08, 0.55, 0.08]}>
+        <mesh>
+          <boxGeometry args={[0.12, 0.14, 0.02]} />
+          <meshPhysicalMaterial 
+            color="#1a1a1a"
+            metalness={0.7}
+            roughness={0.5}
+          />
+        </mesh>
+        <Text
+          position={[0, 0, 0.015]}
+          fontSize={0.12}
+          color={nightMode ? gaugeColor : "#ffffff"}
+          anchorX="center"
+          anchorY="middle"
+          font={undefined}
+          letterSpacing={-0.02}
+          outlineWidth={0.004}
+          outlineColor="#000000"
+          outlineOpacity={0.8}
+        >
+          {(Math.round(currentValue) % 10).toString()}
+        </Text>
+        {/* Split line */}
+        <mesh position={[0, 0, 0.016]}>
+          <boxGeometry args={[0.12, 0.002, 0.001]} />
+          <meshBasicMaterial color="#000000" />
+        </mesh>
+      </group>
+
+      {/* Display Label */}
       <Text
-        position={[0, 0.55, 0.08]}
-        fontSize={0.1}
-        color={gaugeColor}
+        position={[0, 0.72, 0.08]}
+        fontSize={0.025}
+        color="#888888"
         anchorX="center"
         anchorY="middle"
         font={undefined}
-        letterSpacing={0.02}
-        outlineWidth={0.003}
-        outlineColor={gaugeColor}
-        outlineOpacity={0.5}
+        letterSpacing={0.03}
       >
-        {Math.round(currentValue).toString().padStart(2, '0')}
+        SALES METRIC
       </Text>
-
-      {/* LED Segments Decoration */}
-      {[-0.15, -0.05, 0.05, 0.15].map((x, i) => (
-        <mesh key={i} position={[x, 0.55, 0.075]}>
-          <boxGeometry args={[0.005, 0.08, 0.001]} />
-          <meshBasicMaterial 
-            color={gaugeColor}
-            transparent
-            opacity={0.2}
-          />
-        </mesh>
-      ))}
 
       <Text
         position={[0, -0.3, 0.15]}
