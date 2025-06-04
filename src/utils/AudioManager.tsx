@@ -7,43 +7,76 @@ class AudioManager {
     try {
       this.audioContext = new (window.AudioContext || (window as any).webkitAudioContext)()
       this.enabled = true
-      // Skip loading sound files since they don't exist
-      // We'll use generated tones instead
+      await this.loadSounds()
     } catch (error) {
       console.warn('Audio not supported:', error)
     }
   }
 
+  private async loadSounds() {
+    const soundFiles = [
+      { name: 'tick', url: '/sounds/tick.mp3' },
+      { name: 'snap', url: '/sounds/snap.mp3' },
+      { name: 'ambient', url: '/sounds/ambient.mp3' }
+    ]
+
+    for (const sound of soundFiles) {
+      try {
+        const response = await fetch(sound.url)
+        if (response.ok) {
+          const arrayBuffer = await response.arrayBuffer()
+          const audioBuffer = await this.audioContext!.decodeAudioData(arrayBuffer)
+          this.sounds.set(sound.name, audioBuffer)
+          console.log(`Loaded sound: ${sound.name}`)
+        }
+      } catch (error) {
+        // Silently fall back to generated tones
+      }
+    }
+  }
+
   play(soundName: string, volume: number = 0.3) {
-    // Use generated tones instead of loading files
-    switch(soundName) {
-      case 'tick':
-        this.generateTone(1000, 0.05, volume)
-        break
-      case 'snap':
-        this.generateTone(600, 0.1, volume)
-        break
-      case 'ambient':
-        // For ambient, create a low frequency hum
-        this.generateTone(60, 2, volume * 0.3)
-        break
+    if (!this.enabled || !this.audioContext) return
+
+    // Try to play real audio file first
+    if (this.sounds.has(soundName)) {
+      const source = this.audioContext.createBufferSource()
+      const gainNode = this.audioContext.createGain()
+      
+      source.buffer = this.sounds.get(soundName)!
+      gainNode.gain.value = volume
+      
+      source.connect(gainNode)
+      gainNode.connect(this.audioContext.destination)
+      
+      source.start(0)
+    } else {
+      // Fall back to generated tones
+      switch(soundName) {
+        case 'tick':
+          this.generateTone(1000, 0.05, volume)
+          break
+        case 'snap':
+          this.generateTone(600, 0.1, volume)
+          break
+        case 'ambient':
+          // For ambient, create a low frequency hum
+          this.generateTone(60, 2, volume * 0.3)
+          break
+      }
     }
   }
 
   playTick() {
-    if (!this.enabled || !this.audioContext) return
-    this.generateTone(1200, 0.03, 0.2)
+    this.play('tick', 0.2)
   }
 
   playSnap() {
-    if (!this.enabled || !this.audioContext) return
-    this.generateTone(800, 0.08, 0.4)
+    this.play('snap', 0.4)
   }
 
   playAmbient() {
-    if (!this.enabled || !this.audioContext) return
-    // Create a low frequency hum
-    this.generateTone(80, 1.5, 0.05)
+    this.play('ambient', 0.1)
   }
 
   generateTone(frequency: number, duration: number, volume: number = 0.1) {
