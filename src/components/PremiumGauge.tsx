@@ -1,7 +1,7 @@
 import React, { useRef, useMemo, useEffect, useState } from 'react'
 import { useFrame, useThree } from '@react-three/fiber'
 import { Text, Html } from '@react-three/drei'
-import { Group, Mesh, MeshBasicMaterial, BoxGeometry } from 'three'
+import { Group, Mesh, MeshBasicMaterial } from 'three'
 import { gsap } from 'gsap'
 import GaugeFrame from './GaugeFrame'
 import GaugeNeedle from './GaugeNeedle'
@@ -24,8 +24,8 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
   max,
   unit,
   position,
-  color,
-  type,
+  color: _color,
+  type: _type,
   nightMode = false
 }) => {
   const groupRef = useRef<Group>(null)
@@ -145,7 +145,7 @@ const PremiumGauge: React.FC<PremiumGaugeProps> = ({
       {/* LED Display Frame */}
       <mesh position={[0, 0.55, 0.06]}>
         <boxGeometry args={[0.42, 0.17, 0.01]} />
-        <meshBasicMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
+        <meshStandardMaterial color="#1a1a1a" metalness={0.8} roughness={0.2} />
       </mesh>
 
       {/* LED Glow Effect */}

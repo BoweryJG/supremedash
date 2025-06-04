@@ -7,7 +7,7 @@ interface GaugeFrameProps {
   nightMode?: boolean
 }
 
-const GaugeFrame: React.FC<GaugeFrameProps> = ({ color, nightMode = false }) => {
+const GaugeFrame: React.FC<GaugeFrameProps> = ({ color, nightMode: _nightMode = false }) => {
   const outerRingRef = useRef<Mesh>(null)
   const innerRingRef = useRef<Mesh>(null)
 

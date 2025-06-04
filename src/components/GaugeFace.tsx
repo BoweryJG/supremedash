@@ -8,7 +8,7 @@ interface GaugeFaceProps {
   nightMode?: boolean
 }
 
-const GaugeFace: React.FC<GaugeFaceProps> = ({ label, max, color, nightMode = false }) => {
+const GaugeFace: React.FC<GaugeFaceProps> = ({ label, max, color, nightMode: _nightMode = false }) => {
   const generateTicks = () => {
     const ticks = []
     const steps = 8
